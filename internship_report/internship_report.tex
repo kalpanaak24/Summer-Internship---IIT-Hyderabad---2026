@@ -1,0 +1,818 @@
+\documentclass[12pt,a4paper]{report}
+
+%------------------------------------------------
+% Packages
+%------------------------------------------------
+\usepackage[a4paper,left=1in,right=1in,top=1in,bottom=1in]{geometry}
+
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\usepackage[hidelinks]{hyperref}
+
+\onehalfspacing
+
+%------------------------------------------------
+% Header & Footer
+%------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+
+%------------------------------------------------
+% Chapter Style
+%------------------------------------------------
+\titleformat{\chapter}
+{\Huge\bfseries}
+{\thechapter.}{1em}{}
+
+%------------------------------------------------
+% Code Listing Style
+%------------------------------------------------
+\lstset{
+language=C++,
+basicstyle=\ttfamily\small,
+frame=single,
+breaklines=true,
+numbers=left,
+numberstyle=\tiny,
+keywordstyle=\color{blue},
+commentstyle=\color{green!60!black},
+stringstyle=\color{red}
+}
+
+%================================================
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% COVER PAGE %%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{titlepage}
+
+%---------------- Border ----------------%
+
+\begin{tikzpicture}[remember picture,overlay]
+
+\draw[line width=2pt]
+($(current page.north west)+(1cm,-1cm)$)
+rectangle
+($(current page.south east)+(-1cm,1cm)$);
+
+\draw[line width=0.8pt]
+($(current page.north west)+(1.2cm,-1.2cm)$)
+rectangle
+($(current page.south east)+(-1.2cm,1.2cm)$);
+
+\end{tikzpicture}
+
+\centering
+
+\vspace*{0.7cm}
+
+\includegraphics[width=0.18\textwidth]{iithydd.png}
+
+\vspace{0.5cm}
+
+{\Large\bfseries
+INDIAN INSTITUTE OF TECHNOLOGY HYDERABAD
+}
+
+\vspace{0.2cm}
+
+{\large Department of Electrical Engineering}
+
+\vspace{1.3cm}
+
+{\Huge\bfseries
+SUMMER INTERNSHIP REPORT
+}
+
+\vspace{0.5cm}
+
+\vspace{0.4cm}
+
+\vspace{1.5cm}
+
+{\Large\bfseries Submitted By}
+
+\vspace{0.5cm}
+
+{\Large Kalpana Kumari}
+
+\vspace{0.2cm}
+
+B.Tech. (Electronics and Communication Engineering),
+
+IInd year
+
+Banasthali Vidyapith
+
+\vfill
+
+{\Large\bfseries Under the Guidance of}
+
+\vspace{0.5cm}
+
+{\Large Prof. G. V. V. Sharma}
+
+Associate Professor
+
+Department of Electrical Engineering
+
+Indian Institute of Technology Hyderabad
+
+\vfill
+
+\textbf{Summer Internship}
+
+May - July, 2026
+
+\end{titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%% FRONT MATTER %%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pagenumbering{roman}
+
+%=========================================================
+% ACKNOWLEDGEMENT
+%=========================================================
+
+\chapter*{Acknowledgement}
+\addcontentsline{toc}{chapter}{Acknowledgement}
+
+It is my privilege to express my sincere gratitude to \textbf{Prof. G. V. V. Sharma}, Associate Professor, Department of Electrical Engineering, Indian Institute of Technology Hyderabad, for providing me with the opportunity to undertake this Summer Internship. His valuable guidance, encouragement, and meticulously designed learning material greatly enhanced my understanding of Digital Design, Embedded Systems, and Arduino based programming.
+
+I sincerely thank the Department of Electrical Engineering, Indian Institute of Technology Hyderabad, for providing an excellent learning environment and the resources required to successfully complete the internship.
+
+Finally, I thank my parents and friends for their unwavering support and encouragement during the internship. Their motivation enabled me to complete all the assigned experiments and projects successfully.
+
+\vspace{1.5cm}
+
+\begin{flushright}
+\textbf{Kalpana Kumari}\\
+B.Tech(ECE), IInd year\\
+Banasthali Vidyapith
+\end{flushright}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% ABSTRACT %%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+This report presents the work carried out during the Summer Internship at the Department of Electrical Engineering, Indian Institute of Technology Hyderabad. The internship was aimed at developing a strong foundation in Digital Design through hands on implementation using Arduino and fundamental digital electronics concepts.
+
+The internship commenced with the setup of a complete Linux-based development environment, including the installation of Linux, Termux, Debian, Neovim, Ranger File Manager, and Latex, enabling an efficient workflow for embedded systems development and documentation.
+
+The technical component of the internship involved performing a series of digital design experiments, including seven-segment display interfacing, implementation of the 7447 BCD to Seven Segment Decoder, Karnaugh Map simplification, and verification of digital logic using Arduino. These experiments strengthened the understanding of Boolean algebra, combinational logic, decoder design, and hardware implementation.
+
+Following the laboratory experiments, practical projects such as the implementation of a Logic Gate Problem, a Digital Clock, and a Scientific Calculator were completed using Arduino and supporting electronic components. These projects provided practical exposure to circuit design, embedded programming, debugging, and hardware integration.
+
+Overall, the internship significantly enhanced my understanding of digital electronics, embedded systems, programming, hardware interfacing, and technical documentation while providing valuable hands on engineering experience.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%% TABLE OF CONTENTS %%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\tableofcontents
+
+\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%% MAIN REPORT %%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pagenumbering{arabic}
+
+%=========================================================
+% CHAPTER 1
+%=========================================================
+\chapter{Introduction}
+Digital Design forms the backbone of modern electronic systems, ranging from simple digital clocks to advanced embedded processors and computing devices. Understanding the principles of digital logic and implementing them using hardware and software is an essential skill for electronics and computer engineering students.
+
+The Summer Internship conducted by the Department of Electrical Engineering, Indian Institute of Technology Hyderabad was designed to provide practical exposure to Digital Design using the Arduino platform. Throughout the internship, emphasis was placed on learning through experimentation, hardware implementation, software development, and technical documentation.
+
+The internship combined theoretical concepts with practical applications, enabling participants to gain hands-on experience in digital logic, combinational circuits, Boolean algebra, Karnaugh Maps, embedded C programming, Arduino programming, and hardware interfacing.
+
+The activities performed during the internship included the installation of the required development environment, execution of digital design experiments, implementation of logic circuits, and development of embedded projects such as a Digital Clock and a Scientific Calculator.
+
+%---------------------------------------------------------
+\section{Objectives of the Internship}
+
+The primary objectives of the internship were:
+
+\begin{itemize}
+
+\item To understand the fundamentals of Digital Design and Boolean Logic.
+
+\item To study the working of Seven Segment Displays and Decoder ICs.
+
+\item To implement digital logic using Arduino.
+
+\item To perform Karnaugh Map based logic minimization.
+
+\item To gain practical exposure to embedded programming.
+
+\item To develop hardware implementation skills using breadboards and electronic components.
+
+\item To implement real time embedded projects.
+
+\item To improve technical documentation skills using \LaTeX.
+
+\end{itemize}
+
+%---------------------------------------------------------
+
+\section{Hardware and Software Used}
+
+The internship involved the use of various hardware components and software tools for implementation of experiments and projects.
+
+\begin{table}[H]
+\centering
+\caption{Hardware and Software Used}
+\begin{tabular}{|p{6cm}|p{7cm}|}
+\hline
+\textbf{Category} & \textbf{Components / Software} \\
+\hline
+Microcontroller & Arduino Uno \\
+\hline
+Electronic Components & Breadboard, LEDs, Push Buttons, Resistors, Jumper Wires, Seven Segment Display, IC 7447, IC 7474 \\
+\hline
+Operating System & Linux, Debian (Termux Environment) \\
+\hline
+Programming Languages & Embedded C, Arduino C++, AVR Assembly \\
+\hline
+Development Tools & Arduino IDE, ArduinoDroid, GCC, AVR-GCC \\
+\hline
+Editors & Neovim \\
+\hline
+Terminal Tools & Ranger File Manager, Bash Shell \\
+\hline
+Documentation & Latex, GitHub \\
+\hline
+\end{tabular}
+\end{table}
+
+\vspace{0.8cm}
+
+The above hardware and software tools collectively enabled the successful execution of all experiments and projects carried out during the internship.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%% CHAPTER 2 %%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Development Environment Setup}
+
+\section{Introduction}
+
+Before performing the digital design experiments, it was necessary to establish a suitable development environment. The internship emphasized the use of open-source tools and Linux-based utilities for programming, compiling, debugging, and documentation. The setup involved installing Linux, configuring Termux and Debian, learning command-line tools, and preparing a complete Latex environment for report writing.
+
+The development environment also familiarized students with professional software development practices widely adopted in embedded systems and research.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Linux Dual Boot Installation}
+
+\subsection{Objective}
+
+To install a Linux operating system alongside Windows and create a dedicated environment for embedded systems development.
+
+\subsection{Procedure}
+
+\begin{itemize}
+\item Downloaded the Ubuntu ISO image.
+\item Created a bootable USB drive.
+\item Partitioned the hard disk.
+\item Installed Ubuntu alongside Windows.
+\item Verified successful boot into Linux.
+\end{itemize}
+
+\subsection{Outcome}
+
+A Linux based development environment was successfully installed and configured for the internship.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Termux Installation}
+
+\subsection{Objective}
+
+To install Termux and use it as a Linux terminal environment on an Android device.
+
+\subsection{Procedure}
+
+\begin{itemize}
+\item Installed Termux.
+\item Granted storage permissions.
+\item Updated package repositories.
+\item Installed essential Linux packages.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Debian Environment Setup}
+
+\subsection{Objective}
+
+To install Debian inside Termux for compiling embedded software using Linux utilities.
+
+\subsection{Procedure}
+
+\begin{itemize}
+\item Installed proot-distro.
+\item Installed Debian.
+\item Logged into Debian.
+\item Updated the repositories.
+\end{itemize}
+
+\subsection{Commands Used}
+
+\begin{lstlisting}[language=bash]
+pkg install proot-distro
+
+proot-distro install debian
+
+proot-distro login debian
+
+apt update
+
+apt upgrade
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Neovim Editor}
+
+\subsection{Objective}
+
+To use Neovim as a lightweight command-line text editor for programming and editing Latex documents.
+
+\subsection{Procedure}
+
+\begin{itemize}
+\item Installed Neovim.
+\item Opened source files.
+\item Edited Arduino and Latex files.
+\item Saved and exited the editor.
+\end{itemize}
+
+\subsection{Commands}
+
+\begin{lstlisting}[language=bash]
+apt install neovim
+
+nvim main.tex
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Ranger File Manager}
+
+\subsection{Objective}
+
+To learn file navigation using the Ranger terminal file manager.
+
+\subsection{Procedure}
+
+\begin{itemize}
+\item Installed Ranger.
+\item Browsed project folders.
+\item Managed source files.
+\item Opened required directories.
+\end{itemize}
+
+\subsection{Commands}
+
+\begin{lstlisting}[language=bash]
+apt install ranger
+
+ranger
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Latex Installation and Documentation}
+
+\subsection{Objective}
+
+To prepare professional technical documentation using the Latex typesetting system.
+
+\subsection{Procedure}
+
+\begin{itemize}
+\item Installed the required Latex packages.
+\item Created the first document.
+\item Compiled the source into a PDF.
+\item Corrected compilation errors.
+\item Added figures, tables, and mathematical equations.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Learning Outcome}
+
+The development environment setup introduced Linux-based tools commonly used in embedded systems and research. Familiarity with Termux, Debian, Neovim, Ranger, and \LaTeX{} significantly improved command-line proficiency, programming workflow, documentation skills, and project organization. These tools formed the foundation for successfully performing the subsequent digital design experiments and embedded systems projects.
+
+\section{Overview}
+
+The initial phase of the internship consisted of a series of experiments designed to strengthen the understanding of digital electronics and embedded systems. These experiments focused on the operation of seven-segment displays, BCD-to-seven-segment decoder ICs, and combinational logic design using Karnaugh Maps. The knowledge gained through these experiments formed the foundation for the implementation of the subsequent embedded systems projects.
+
+%=========================================================
+\section{Experiment 1: Seven Segment Display, Hardware Setup}
+
+\subsection*{Aim}
+
+To study the pin configuration and hardware interfacing of a seven-segment display using Arduino Uno.
+
+\subsection*{Description}
+
+The seven-segment display consists of seven LEDs arranged to display decimal digits. In this experiment, the display was connected to the Arduino through a breadboard to understand its pin configuration and hardware connections.
+
+\subsection*{Procedure}
+
+\begin{itemize}
+\item Connected the display to the breadboard.
+\item Connected the common pin to the power supply.
+\item Connected individual segment pins to Arduino.
+\item Verified all hardware connections.
+\end{itemize}
+
+\textbf{Result:} The hardware setup was completed successfully and all display connections were verified.
+
+%=========================================================
+\section{Experiment 2: Seven Segment Display, Hardware Control}
+
+\subsection*{Aim}
+
+To control the individual segments of a seven-segment display through direct hardware connections.
+
+\subsection*{Description}
+
+Different combinations of LEDs were manually activated by changing the hardware connections. This demonstrated how decimal digits are generated by illuminating different display segments.
+
+\subsection*{Procedure}
+
+\begin{itemize}
+\item Connected required display segments.
+\item Applied the required logic levels.
+\item Observed the illuminated segments.
+\item Verified the displayed digits.
+\end{itemize}
+
+\textbf{Result:} Different decimal digits were successfully displayed by activating suitable combinations of display segments.
+
+%=========================================================
+\section{Experiment 3: Seven Segment Display – Software Control}
+
+\subsection*{Aim}
+
+To control a seven-segment display using an Arduino program.
+
+\subsection*{Description}
+
+The display was interfaced with Arduino and controlled through Embedded C. Different output patterns were generated by programming the Arduino digital pins.
+
+\subsection*{Procedure}
+
+\begin{itemize}
+\item Connected the display to Arduino.
+\item Uploaded the Arduino program.
+\item Executed the program.
+\item Observed the displayed digits.
+\end{itemize}
+
+\subsection*{Arduino Program}
+
+\begin{lstlisting}[language=C++]
+void sevenseg(int a,int b,int c,int d,int e,int f,int g)
+{
+  digitalWrite(2, a); 
+  digitalWrite(3, b); 
+  digitalWrite(4, c); 
+  digitalWrite(5, d); 
+  digitalWrite(6, e); 
+  digitalWrite(7, f);     
+  digitalWrite(8, g); 
+}
+void setup() 
+{
+    pinMode(2, OUTPUT);  
+    pinMode(3, OUTPUT);
+    pinMode(4, OUTPUT);
+    pinMode(5, OUTPUT);
+    pinMode(6, OUTPUT);
+    pinMode(7, OUTPUT);
+    pinMode(8, OUTPUT);            
+}
+void loop() 
+{
+sevenseg(1,0,0,1,1,1,1);  
+}
+
+\end{lstlisting}
+
+\textbf{Result:} The Arduino successfully controlled the seven-segment display and generated the required decimal digits.
+
+%=========================================================
+\section{Experiment 4: 7447 BCD to Seven Segment Decoder, Hardware}
+
+\subsection*{Aim}
+
+To study the working of the 7447 BCD to Seven Segment Decoder IC through hardware implementation.
+
+\subsection*{Description}
+
+The 7447 IC converts a 4-bit Binary Coded Decimal (BCD) input into the corresponding seven-segment display output. In this experiment, the IC was interfaced with a seven-segment display to observe the displayed decimal digits.
+
+\subsection*{Procedure}
+
+\begin{itemize}
+    \item Connected the 7447 decoder IC on the breadboard.
+    \item Connected the BCD input lines.
+    \item Connected the seven-segment display to the decoder outputs.
+    \item Applied different BCD inputs and observed the output.
+\end{itemize}
+
+\textbf{Result:} The decoder correctly converted the applied BCD inputs into their corresponding decimal digits on the seven-segment display.
+
+%=========================================================
+\section{Experiment 5: 7447 BCD to Seven Segment Decoder, Software}
+
+\subsection*{Aim}
+
+To implement the functionality of the 7447 BCD to Seven Segment Decoder using Arduino.
+
+\subsection*{Description}
+
+The functionality of the hardware decoder was implemented through software by generating the appropriate output combinations using Arduino digital pins.
+
+\subsection*{Procedure}
+
+\begin{itemize}
+    \item Interfaced the seven-segment display with Arduino.
+    \item Developed the Arduino program for BCD decoding.
+    \item Uploaded the program.
+    \item Verified the displayed output.
+\end{itemize}
+
+\textbf{Result:} The Arduino successfully emulated the operation of the 7447 BCD to Seven Segment Decoder.
+
+%=========================================================
+\section{Experiment 6: Karnaugh Map Based Incrementing Decoder}
+
+\subsection*{Aim}
+
+To design and verify an incrementing decoder using Karnaugh Map simplification.
+
+\subsection*{Description}
+
+Boolean expressions obtained from the truth table were simplified using Karnaugh Maps. The simplified expressions were implemented and verified using Arduino and digital logic.
+
+\subsection*{Procedure}
+
+\begin{itemize}
+    \item Prepared the truth table.
+    \item Simplified Boolean expressions using Karnaugh Maps.
+    \item Implemented the logic circuit.
+    \item Verified the output for different input combinations.
+\end{itemize}
+
+\textbf{Result:} The simplified Boolean expressions were successfully implemented, and the incrementing decoder produced the expected outputs for all test cases.
+
+%%%%%%%%%%%%%%%% CHAPTER 4 %%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%% CHAPTER 4 %%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Logic Gate Problem}
+
+\section{Introduction}
+
+As part of the internship, a combinational logic problem based on GATE EE 2019 was analysed and implemented. The objective was to derive the Boolean expression from the given logic circuit, verify the corresponding truth table, and implement the logic function through hardware. The analysis showed that the circuit realizes the Exclusive-OR (XOR) function. :contentReference[oaicite:2]{index=2}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Objective}
+
+The objectives of this task were:
+
+\begin{itemize}
+    \item To analyse the given combinational logic circuit.
+    \item To derive the Boolean expression.
+    \item To verify the truth table.
+    \item To implement the logic function using hardware.
+    \item To validate the practical output.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Boolean Expression}
+
+The logic circuit consists of two NOT gates, two AND gates and one OR gate. The two product terms obtained from the circuit are
+
+\[
+T_1=\overline{X}Y
+\]
+
+\[
+T_2=X\overline{Y}
+\]
+
+Therefore,
+
+\[
+Z=T_1+T_2
+\]
+
+\[
+Z=\overline{X}Y+X\overline{Y}
+\]
+
+which represents the Exclusive-OR (XOR) function.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Truth Table}
+
+\begin{table}[H]
+\centering
+\caption{Truth Table of XOR Function}
+
+\begin{tabular}{|c|c|c|}
+\hline
+X & Y & Z\\
+\hline
+0 & 0 & 0\\
+0 & 1 & 1\\
+1 & 0 & 1\\
+1 & 1 & 0\\
+\hline
+\end{tabular}
+
+\end{table}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Result}
+
+The combinational logic circuit was successfully analysed and implemented. The observed outputs matched the theoretical truth table for all input combinations, confirming that the given circuit realizes the XOR function. :contentReference[oaicite:4]{index=4}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%% CHAPTER 5 %%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Digital Clock}
+
+\section{Introduction}
+
+The Digital Clock project was developed using an Arduino Uno and a four digit seven segment display. The objective of the project was to display time in the HH:MM format while allowing the user to set and update the hours and minutes using push buttons. The project combined concepts of embedded programming, multiplexing, timing control, and hardware interfacing.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Objective}
+
+The objectives of this project were:
+
+\begin{itemize}
+    \item To design and implement a digital clock using Arduino.
+    \item To interface a four digit seven segment display.
+    \item To display time in HH:MM format.
+    \item To update time accurately using software timing.
+    \item To provide user control for setting hours and minutes.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Components Required}
+
+\begin{table}[H]
+\centering
+\caption{Components Used}
+
+\begin{tabular}{|l|c|}
+\hline
+Component & Quantity\\
+\hline
+Arduino Uno & 1\\
+4-Digit Seven Segment Display & 1\\
+Push Buttons & 3\\
+220$\Omega$ Resistors & 8\\
+Breadboard & 1\\
+Jumper Wires & As Required\\
+USB Cable & 1\\
+\hline
+\end{tabular}
+
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Working Principle}
+
+The Arduino continuously updates the current time and displays it on a multiplexed four-digit seven-segment display. Three push buttons are provided to increment the hour, increment the minute, and start or pause the clock. The multiplexing technique rapidly refreshes each display digit, creating the appearance of a continuously illuminated display.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Output}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{finalclock.jpeg}
+    \caption{Digital Clock Output}
+    \label{fig:digital_clock_output}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Result}
+
+The Digital Clock was successfully implemented using Arduino and a four-digit seven-segment display. The clock accurately displayed time in the HH:MM format, and the push buttons allowed the user to set and update the displayed time correctly.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%% CHAPTER 6 %%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Scientific Calculator}
+
+\section{Introduction}
+
+The Scientific Calculator was developed using an Arduino Uno and a breadboard-based circuit. The project was designed to perform basic arithmetic operations through user inputs while displaying the results on a four-digit seven-segment display. The implementation provided practical exposure to embedded programming, user input handling, arithmetic operations, and display interfacing.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Objective}
+
+The objectives of this project were:
+
+\begin{itemize}
+    \item To design and implement a scientific calculator using Arduino.
+    \item To perform basic arithmetic operations.
+    \item To accept user inputs through push buttons.
+    \item To display numerical values and results on a seven-segment display.
+    \item To integrate hardware and software for an embedded application.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Components Required}
+
+\begin{table}[H]
+\centering
+\caption{Components Used}
+
+\begin{tabular}{|l|c|}
+\hline
+Component & Quantity\\
+\hline
+Arduino Uno & 1\\
+4-Digit Seven Segment Display & 1\\
+Push Buttons & As Required\\
+220$\Omega$ Resistors & Multiple\\
+Breadboard & 1\\
+Jumper Wires & As Required\\
+USB Cable & 1\\
+\hline
+\end{tabular}
+
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Working Principle}
+
+The calculator accepts numerical inputs and arithmetic operations from the user through push buttons. The Arduino processes the selected operation and computes the result using embedded C programming. The calculated output is then displayed on the multiplexed seven segment display. The project demonstrates the practical implementation of arithmetic logic using an embedded system.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{display.jpeg}
+    \caption{Scientific Calculator Output}
+    \label{fig:calculator_output}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Result}
+
+The Scientific Calculator was successfully implemented using Arduino and a breadboard-based hardware setup. The system correctly accepted user inputs, performed arithmetic operations, and displayed the corresponding results on the seven-segment display. The project demonstrated the integration of digital electronics, embedded programming, and user interface design.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%% CONCLUSION %%%%%%%%%%%%%%%%%%%%%%
+\chapter{Conclusion}
+
+The Summer Internship at the Department of Electrical Engineering, Indian Institute of Technology Hyderabad provided valuable practical exposure to Digital Design and Embedded Systems. During the internship, a Linux based development environment was established using open source tools such as Termux, Debian, Neovim, Ranger, and Latex, enabling an efficient workflow for programming and documentation.
+
+A series of experiments involving seven segment displays, the 7447 decoder, and Karnaugh Map simplification strengthened the understanding of combinational logic and digital circuit design. These concepts were further reinforced through the successful implementation of the Logic Gate Problem, Digital Clock, and Scientific Calculator projects using Arduino.
+
+Overall, the internship enhanced my knowledge of digital electronics, embedded programming, hardware interfacing, problem solving, and technical documentation. The experience provided a strong practical foundation that will be beneficial for future academic projects, research opportunities, and professional development in embedded systems and related fields.
+\end{document}
